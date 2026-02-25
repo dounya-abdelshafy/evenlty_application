@@ -43,6 +43,10 @@ dependencies:
   provider: ^6.1.5+1
   introduction_screen: ^4.0.0
   toggle_switch: ^2.3.0
+  firebase_core: ^4.3.0
+  cloud_firestore: ^6.1.1
+  fluttertoast: ^9.0.0
+  firebase_auth: ^6.1.4
 
 dev_dependencies:
   flutter_test:

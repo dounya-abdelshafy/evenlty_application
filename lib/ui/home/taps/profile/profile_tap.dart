@@ -1,10 +1,14 @@
 import 'package:evently_app/l10n/app_localizations.dart';
 import 'package:evently_app/providers/app_theme_provider.dart';
+import 'package:evently_app/providers/event_list_provider.dart';
 import 'package:evently_app/ui/home/taps/profile/language/language_bottom_sheet.dart';
 import 'package:evently_app/ui/home/taps/profile/theme/theme_bottom_sheet.dart';
+import 'package:evently_app/ui/home/taps/widgets/custom_elevated_button.dart';
+import 'package:evently_app/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../providers/app_language_provider.dart';
+import '../../../../providers/user_provider.dart';
 import '../../../../utils/app_assets.dart';
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/app_styles.dart';
@@ -16,8 +20,6 @@ class ProfileTap extends StatefulWidget {
   State<ProfileTap> createState() => _ProfileTapState();
 }
 
-//new command
-
 class _ProfileTapState extends State<ProfileTap> {
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,8 @@ class _ProfileTapState extends State<ProfileTap> {
     var width = MediaQuery.of(context).size.width;
     var languageProvider = Provider.of<AppLanguageProvider>(context);
     var themeProvider = Provider.of<AppThemeProvider>(context);
+    var userProvider = Provider.of<UserProvider>(context);
+    var eventListProvider = Provider.of<EventListProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -42,8 +46,8 @@ class _ProfileTapState extends State<ProfileTap> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Route Academy', style: AppStyles.bold24White),
-                Text('routeacademy@gmail.com', style: AppStyles.medium16White),
+                Text(userProvider.currentUser!.name, style: AppStyles.bold24White),
+                Text(userProvider.currentUser!.email, style: AppStyles.medium16White),
               ],
             ),
           ],
@@ -96,9 +100,7 @@ class _ProfileTapState extends State<ProfileTap> {
                 ),
               ),
             ),
-
             SizedBox(height: height * 0.03),
-
             Text(
               AppLocalizations.of(context)!.theme,
               style: Theme.of(context).textTheme.headlineLarge,
@@ -139,7 +141,48 @@ class _ProfileTapState extends State<ProfileTap> {
               ),
             ),
             Spacer(),
-            ElevatedButton(
+            CustomElevatedButton(
+              onPressed: () {
+                //todo: favouriteEventList => empty
+                eventListProvider.favouriteEventList = [];
+                //todo: logout
+                Navigator.pushNamedAndRemoveUntil(context, AppRoutes.loginRouteName, (route) => false,);
+              },
+              text: AppLocalizations.of(context)!.logout,
+              backgroundColor: AppColors.redColor,
+              borderColor: AppColors.redColor,
+              icon: true,
+              iconWidget: Padding(
+                padding: EdgeInsets.symmetric(horizontal: width * 0.02),
+                child: Icon(
+                  Icons.logout,
+                  size: 28,
+                  color: AppColors.whiteColor,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void showLanguageBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => LanguageBottomSheet(),
+    );
+  }
+
+  void showThemeBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => ThemeBottomSheet(),
+    );
+  }
+}
+/*
+ ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.redColor,
@@ -167,23 +210,4 @@ class _ProfileTapState extends State<ProfileTap> {
                 ],
               ),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void showLanguageBottomSheet() {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) => LanguageBottomSheet(),
-    );
-  }
-
-  void showThemeBottomSheet() {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) => ThemeBottomSheet(),
-    );
-  }
-}
+ */

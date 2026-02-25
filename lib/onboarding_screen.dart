@@ -221,7 +221,7 @@ class OnBoardingScreen extends StatelessWidget {
         ),
       ],
       onDone: () {
-        Navigator.pushReplacementNamed(context, AppRoutes.homeRouteName);
+        Navigator.pushReplacementNamed(context, AppRoutes.loginRouteName);
       },
       showBackButton: true,
       back: Icon(
